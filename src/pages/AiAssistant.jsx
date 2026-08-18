@@ -33,12 +33,10 @@ export default function AiAssistant() {
     setInput('');
     setLoading(true);
 
-    // Simulate smart movie assistant response / or hook to AI API
     setTimeout(() => {
       let aiResponseText = "";
       const lower = userText.toLowerCase();
 
-      // Check if topic is unrelated to movies
       const nonMovieKeywords = ['weather', 'python', 'javascript', 'cook', 'recipe', 'homework', 'math', 'politics'];
       const isUnrelated = nonMovieKeywords.some(k => lower.includes(k)) && !lower.includes('movie') && !lower.includes('film');
 
@@ -83,7 +81,6 @@ export default function AiAssistant() {
         height: '600px',
         boxShadow: 'var(--shadow-lg)'
       }}>
-        {/* Chat header */}
         <div style={{
           padding: '16px 20px',
           background: 'rgba(255, 255, 255, 0.03)',
@@ -112,7 +109,6 @@ export default function AiAssistant() {
           </div>
         </div>
 
-        {/* Message Area */}
         <div style={{
           flex: 1,
           padding: '20px',
@@ -151,9 +147,9 @@ export default function AiAssistant() {
                 <div style={{
                   padding: '12px 18px',
                   borderRadius: '16px',
-                  background: isUser ? 'var(--primary)' : 'rgba(255, 255, 255, 0.07)',
-                  color: '#fff',
-                  border: isUser ? 'none' : '1px solid var(--border-color)',
+                  background: isUser ? 'var(--primary)' : '#f9fafb',
+                  color: '#000',
+                  border: isUser ? 'none' : '1px solid #d1d5db',
                   lineHeight: '1.5',
                   fontSize: '0.95rem'
                 }}>
@@ -206,7 +202,6 @@ export default function AiAssistant() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Chat Input */}
         <form onSubmit={handleSend} style={{
           padding: '16px 20px',
           background: 'rgba(255, 255, 255, 0.02)',
@@ -221,11 +216,11 @@ export default function AiAssistant() {
             onChange={(e) => setInput(e.target.value)}
             style={{
               flex: 1,
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-color)',
+              background: '#ffffff',
+              border: '1px solid #d1d5db',
               borderRadius: 'var(--radius-full)',
               padding: '12px 20px',
-              color: '#fff',
+              color: '#000',
               outline: 'none',
               fontSize: '0.95rem'
             }}
