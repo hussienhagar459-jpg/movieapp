@@ -5,6 +5,7 @@ import Pagination from '../components/Pagination';
 import HeroBanner from '../components/HeroBanner';
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState('movie');
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -16,7 +17,10 @@ export default function Home() {
     async function loadData() {
       setLoading(true);
       try {
-        const data = await tmdbApi.getNowPlayingMovies(currentPage);
+        const data = activeTab === 'movie'
+          ? await tmdbApi.getNowPlayingMovies(currentPage)
+          : await tmdbApi.getPopularTVShows(currentPage);
+
         if (isMounted && data) {
           const results = data.results || [];
           setItems(results.slice(0, 12));
@@ -34,27 +38,51 @@ export default function Home() {
     return () => {
       isMounted = false;
     };
-  }, [currentPage]);
+  }, [activeTab, currentPage]);
+
+  const handleTabChange = (tab) => {
+    if (tab === activeTab) return;
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div>
       <main className="page-container">
         <HeroBanner />
 
-        <h2 className="section-title">Now Playing</h2>
+        <div className="tabs-row">
+          <button
+            className={`tab-btn ${activeTab === 'movie' ? 'active' : ''}`}
+            onClick={() => handleTabChange('movie')}
+          >
+            Movies
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'tv' ? 'active' : ''}`}
+            onClick={() => handleTabChange('tv')}
+          >
+            TV Shows
+          </button>
+        </div>
+
+        <h2 className="section-title">
+          {activeTab === 'movie' ? 'Now Playing' : 'Popular TV Shows'}
+        </h2>
         
         {loading ? (
-          <div style={{ padding: '60px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-            Loading movies...
+          <div className="loading-state">
+            <div className="loading-spinner"></div>
+            <p>Loading {activeTab === 'movie' ? 'movies' : 'TV shows'}...</p>
           </div>
         ) : (
           <>
-            <div className="movies-grid">
+            <div className="movies-grid" key={activeTab + currentPage}>
               {items.map((item) => (
                 <MovieCard 
                   key={item.id} 
                   item={item} 
-                  mediaType="movie" 
+                  mediaType={activeTab} 
                 />
               ))}
             </div>

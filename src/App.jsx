@@ -30,6 +30,7 @@ export default function App() {
               <Route path="/ai-assistant" element={<AiAssistant />} />
             </Routes>
           </main>
+          <Footer />
         </div>
       </WishlistProvider>
     </Router>
