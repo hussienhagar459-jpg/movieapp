@@ -22,12 +22,6 @@ export default function Navbar() {
             >
               Movies
             </Link>
-            <Link
-              to="/tv"
-              className={`nav-link ${location.pathname === '/tv' ? 'active' : ''}`}
-            >
-              TV Shows
-            </Link>
           </nav>
         </div>
 
