@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, Film, AlertCircle } from 'lucide-react';
+import { Bot, Send, User } from 'lucide-react';
+import { sendMessage } from '../services/ai';
 
 const INITIAL_MESSAGES = [
   {
@@ -23,44 +24,56 @@ export default function AiAssistant() {
     scrollToBottom();
   }, [messages, loading]);
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || loading) return;
+ const handleSend = async (e) => {
+  e.preventDefault();
 
-    const userText = input.trim();
-    const userMsg = { id: Date.now(), sender: 'user', text: userText };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
-    setLoading(true);
+  if (!input.trim() || loading) return;
 
-    setTimeout(() => {
-      let aiResponseText = "";
-      const lower = userText.toLowerCase();
+  const userText = input.trim();
 
-      const nonMovieKeywords = ['weather', 'python', 'javascript', 'cook', 'recipe', 'homework', 'math', 'politics'];
-      const isUnrelated = nonMovieKeywords.some(k => lower.includes(k)) && !lower.includes('movie') && !lower.includes('film');
-
-      if (isUnrelated) {
-        aiResponseText = "I'm a movie assistant, so I can only help with movie and TV-related questions. What kind of movies or shows are you in the mood for?";
-      } else if (lower.includes('sci-fi') || lower.includes('science fiction') || lower.includes('space')) {
-        aiResponseText = "If you enjoy science fiction, you could try Interstellar, Arrival, The Martian, or Blade Runner 2049. If you want something less serious, Guardians of the Galaxy or Men in Black are great choices!";
-      } else if (lower.includes('action') || lower.includes('thriller')) {
-        aiResponseText = "For action-packed excitement, I recommend John Wick: Chapter 4, Top Gun: Maverick, Mad Max: Fury Road, or The Dark Knight!";
-      } else if (lower.includes('comedy') || lower.includes('funny')) {
-        aiResponseText = "For a good laugh, check out Superbad, The Grand Budapest Hotel, Knives Out, or 21 Jump Street!";
-      } else if (lower.includes('horror') || lower.includes('scary')) {
-        aiResponseText = "For spine-chilling horror, you might like Hereditary, A Quiet Place, The Conjuring, or Talk to Me!";
-      } else if (lower.includes('animation') || lower.includes('anime')) {
-        aiResponseText = "For incredible animation, try Spider-Man: Into the Spider-Verse, Spirited Away, Coco, or Arcane!";
-      } else {
-        aiResponseText = `That's an interesting question about "${userText}". Based on popular viewer ratings, I recommend exploring the trending movies on our Home page or checking out classics like Inception, The Shawshank Redemption, and Dune!`;
-      }
-
-      const aiMsg = { id: Date.now() + 1, sender: 'ai', text: aiResponseText };
-      setMessages(prev => [...prev, aiMsg]);
-      setLoading(false);
-    }, 900);
+  const userMsg = {
+    id: Date.now(),
+    sender: 'user',
+    text: userText,
   };
+
+  const updatedMessages = [...messages, userMsg];
+
+  setMessages(updatedMessages);
+  setInput('');
+  setLoading(true);
+
+  try {
+    const conversation = updatedMessages
+      .filter((message) => message.sender !== 'ai' || message.id !== 1)
+      .map((message) => ({
+        role: message.sender === 'user' ? 'user' : 'assistant',
+        content: message.text,
+      }));
+
+    const aiResponse = await sendMessage(conversation);
+
+    const aiMsg = {
+      id: Date.now() + 1,
+      sender: 'ai',
+      text: aiResponse,
+    };
+
+    setMessages((prev) => [...prev, aiMsg]);
+  } catch (error) {
+    console.error('AI Error:', error);
+
+    const errorMsg = {
+      id: Date.now() + 1,
+      sender: 'ai',
+      text: 'Sorry, something went wrong while connecting to the AI. Please try again.',
+    };
+
+    setMessages((prev) => [...prev, errorMsg]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="page-container" style={{ paddingTop: '30px', maxWidth: '900px' }}>
