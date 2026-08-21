@@ -4,11 +4,9 @@ import MovieCard from '../components/MovieCard';
 import { Heart, Film, Tv } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// استيراد الصورة باسم heart.png
 import heartImg from '../assets/heart.png';
 
 export default function Wishlist() {
-  // تم إضافة removeFromWishlist هنا
   const { wishlist, removeFromWishlist } = useWishlist(); 
   const [filter, setFilter] = useState('all');
 
@@ -36,7 +34,6 @@ export default function Wishlist() {
           justifyContent: 'center'
         }}>
           <div style={{ position: 'relative', width: '120px', height: '120px', marginBottom: '24px' }}>
-             {/* عرض صورة heart.png */}
              <img 
                src={heartImg} 
                alt="Empty Wishlist Heart" 
@@ -80,7 +77,6 @@ export default function Wishlist() {
                 <p style={{ color: '#333', fontSize: '1rem', lineHeight: '1.5', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {item.overview}
                 </p>
-                {/* تم إضافة onClick هنا للزر */}
                 <button 
                   onClick={() => removeFromWishlist(item.id)}
                   style={{ position: 'absolute', top: '24px', right: '24px', background: 'none', border: 'none', cursor: 'pointer' }}
