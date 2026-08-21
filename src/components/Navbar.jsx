@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, ChevronDown } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useWishlist } from '../context/WishlistContext';
 
 export default function Navbar() {
@@ -14,16 +14,9 @@ export default function Navbar() {
           <Link to="/" className="nav-brand">
             Movie App
           </Link>
-
-
         </div>
 
         <div className="nav-actions">
-          <div className="nav-lang">
-            <span>En</span>
-            <ChevronDown size={14} />
-          </div>
-
           <Link to="/watchlist" className="nav-wishlist-btn">
             <Heart 
               size={20} 
@@ -31,7 +24,7 @@ export default function Navbar() {
               color="#111827"
               strokeWidth={wishlistCount > 0 ? 0 : 2}
             />
-            <span>watchlist</span>
+            <span>Wishlist</span>
           </Link>
 
           <Link to="/ai-assistant" className="nav-ai-btn">
