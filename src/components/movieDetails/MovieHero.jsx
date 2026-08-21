@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+// 1. استيراد الـ Hook الخاص بالـ Wishlist Context
+import { useWishlist } from "../../context/WishlistContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStar,
@@ -9,42 +11,29 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-// TMDB Poster Base URL
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieHero({ movie, onWatchTrailer }) {
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const [isInWishlist, setIsInWishlist] = useState(false);
 
-  // Check if current movie already exists in localStorage Wishlist
   useEffect(() => {
-    if (!movie) return;
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    if (!movie || !wishlist) return;
     setIsInWishlist(wishlist.some((item) => item.id === movie.id));
-  }, [movie]);
+  }, [movie, wishlist]);
 
-  // Toggle Add / Remove from Wishlist
   const toggleWishlist = () => {
     if (!movie) return;
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-
-    let updatedWishlist;
     if (isInWishlist) {
-      updatedWishlist = wishlist.filter((item) => item.id !== movie.id);
-      setIsInWishlist(false);
+      removeFromWishlist(movie.id); 
     } else {
-      updatedWishlist = [...wishlist, movie];
-      setIsInWishlist(true);
+      addToWishlist(movie);
     }
-
-    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-    // Dispatch custom event to notify Navbar / Wishlist page
-    window.dispatchEvent(new Event("wishlistUpdated"));
   };
 
   if (!movie) return null;
 
   return (
-    // Hero Banner Container
     <div
       style={{
         width: "100%",
@@ -63,7 +52,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
           alignItems: "center",
         }}
       >
-        {/* Movie Poster */}
         <img
           src={
             movie.poster_path
@@ -80,7 +68,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
           }}
         />
 
-        {/* Hero Info Column */}
         <div
           style={{
             flex: "1 1 340px",
@@ -123,7 +110,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
             </p>
           )}
 
-          {/* Badges Row */}
           <div
             style={{
               display: "flex",
@@ -189,7 +175,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
             </span>
           </div>
 
-          {/* Action Buttons */}
           <div
             style={{
               display: "flex",
@@ -219,7 +204,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
               <span>Watch Trailer</span>
             </button>
 
-            {/* Functional Wishlist Button */}
             <button
               onClick={toggleWishlist}
               style={{
