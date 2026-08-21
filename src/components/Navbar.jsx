@@ -1,17 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Heart, ChevronDown } from 'lucide-react';
 import { useWishlist } from '../context/WishlistContext';
 
 export default function Navbar() {
   const { wishlistCount } = useWishlist();
+  const location = useLocation();
 
   return (
     <header className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="nav-brand">
-          Movie App
-        </Link>
+        <div className="nav-left">
+          <Link to="/" className="nav-brand">
+            Movie App
+          </Link>
+
+          <nav className="nav-links">
+            <Link
+              to="/"
+              className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+            >
+              Movies
+            </Link>
+          </nav>
+        </div>
 
         <div className="nav-actions">
           <div className="nav-lang">
