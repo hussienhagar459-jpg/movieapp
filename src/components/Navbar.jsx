@@ -15,14 +15,7 @@ export default function Navbar() {
             Movie App
           </Link>
 
-          <nav className="nav-links">
-            <Link
-              to="/"
-              className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-            >
-              Movies
-            </Link>
-          </nav>
+
         </div>
 
         <div className="nav-actions">
