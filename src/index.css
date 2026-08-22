@@ -98,14 +98,6 @@ button {
   gap: 4px;
 }
 
-.nav-wishlist-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
 
 .nav-ai-btn {
   display: flex;
@@ -428,20 +420,6 @@ button {
 .card-date {
   font-size: 0.85rem;
   color: var(--text-muted);
-}
-
-.card-wishlist-btn {
-  color: var(--text-muted);
-  transition: var(--transition);
-  margin-top: 4px;
-}
-
-.card-wishlist-btn:hover {
-  transform: scale(1.1);
-}
-
-.card-wishlist-btn.in-wishlist {
-  color: var(--primary);
 }
 
 

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import tmdbApi, { BACKDROP_BASE_URL, IMAGE_BASE_URL } from '../services/tmdb';
-import { Star, Heart, ArrowLeft, Tv } from 'lucide-react';
-import { useWishlist } from '../context/WishlistContext';
+import { Star, ArrowLeft, Tv } from 'lucide-react';
 
 export default function TvDetails() {
   const { id } = useParams();
-  const { isInWishlist, toggleWishlist } = useWishlist();
   const [show, setShow] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,7 +49,6 @@ export default function TvDetails() {
     );
   }
 
-  const inWishlist = isInWishlist(show.id);
   const backdropUrl = show.backdrop_path ? `${BACKDROP_BASE_URL}${show.backdrop_path}` : null;
   const posterUrl = show.poster_path ? `${IMAGE_BASE_URL}${show.poster_path}` : null;
 
@@ -91,17 +88,6 @@ export default function TvDetails() {
             </div>
 
             <p className="hero-overview" style={{ WebkitLineClamp: 'unset' }}>{show.overview}</p>
-
-            <button 
-              className="btn-primary"
-              onClick={() => toggleWishlist(show, 'tv')}
-            >
-              <Heart 
-                size={18} 
-                fill={inWishlist ? 'currentColor' : 'none'} 
-              />
-              <span>{inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
-            </button>
           </div>
         </div>
       </div>

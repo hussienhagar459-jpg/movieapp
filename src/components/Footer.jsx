@@ -1,5 +1,5 @@
 import React from 'react';
-import { Film, Heart } from 'lucide-react';
+import { Film } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
@@ -22,7 +22,6 @@ export default function Footer() {
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <Link to="/" style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Movies</Link>
           <Link to="/tv" style={{ color: 'var(--text-muted)', fontWeight: 500 }}>TV Shows</Link>
-          <Link to="/watchlist" style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Wishlist</Link>
           <Link to="/ai-assistant" style={{ color: 'var(--text-muted)', fontWeight: 500 }}>AI Assistant</Link>
         </div>
       </div>
