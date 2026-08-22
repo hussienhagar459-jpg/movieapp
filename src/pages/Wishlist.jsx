@@ -1,11 +1,14 @@
+
 import React, { useState } from 'react';
 import { useWishlist } from '../context/WishlistContext';
 import MovieCard from '../components/MovieCard';
 import { Heart, Film, Tv } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+import heartImg from '../assets/heart.png';
+
 export default function Wishlist() {
-  const { wishlist } = useWishlist();
+  const { wishlist, removeFromWishlist } = useWishlist(); 
   const [filter, setFilter] = useState('all');
 
   const filteredItems = wishlist.filter(item => {
@@ -32,10 +35,11 @@ export default function Wishlist() {
           justifyContent: 'center'
         }}>
           <div style={{ position: 'relative', width: '120px', height: '120px', marginBottom: '24px' }}>
-             <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" fill="#d1d5db" />
-                <line x1="2" y1="2" x2="22" y2="22" stroke="#ffffff" strokeWidth="3" />
-             </svg>
+             <img 
+               src={heartImg} 
+               alt="Empty Wishlist Heart" 
+               style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+             />
           </div>
           <h2 style={{ fontSize: '1.5rem', fontWeight: '500', marginBottom: '32px' }}>No Movies in watch list</h2>
           <Link to="/" className="search-btn" style={{ padding: '12px 60px', textDecoration: 'none', display: 'inline-block', borderRadius: '8px' }}>
@@ -75,6 +79,7 @@ export default function Wishlist() {
                   {item.overview}
                 </p>
                 <button 
+                  onClick={() => removeFromWishlist(item.id)}
                   style={{ position: 'absolute', top: '24px', right: '24px', background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--primary)" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
