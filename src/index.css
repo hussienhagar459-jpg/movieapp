@@ -98,6 +98,13 @@ button {
   gap: 4px;
 }
 
+.nav-wishlist-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text-main);
+}
 
 .nav-ai-btn {
   display: flex;
