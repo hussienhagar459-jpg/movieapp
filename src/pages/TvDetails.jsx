@@ -1,108 +1,123 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import tmdbApi, { BACKDROP_BASE_URL, IMAGE_BASE_URL } from '../services/tmdb';
-import { Star, Heart, ArrowLeft, Tv } from 'lucide-react';
-import { useWishlist } from '../context/WishlistContext';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { MoreHorizontal } from 'lucide-react';
+import { IMAGE_BASE_URL } from '../services/tmdb';
 
-export default function TvDetails() {
-  const { id } = useParams();
-  const { isInWishlist, toggleWishlist } = useWishlist();
-  const [show, setShow] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function MovieCard({ item, mediaType = 'movie' }) {
+  if (!item) return null;
 
-  useEffect(() => {
-    let isMounted = true;
-    async function fetchDetails() {
-      setLoading(true);
-      try {
-        const data = await tmdbApi.getTVShowDetails(id);
-        if (isMounted) setShow(data);
-      } catch (err) {
-        console.error('Error fetching TV show details:', err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    }
+  const title = item.title || item.name || 'Untitled';
+  const releaseDateRaw = item.release_date || item.first_air_date;
 
-    fetchDetails();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A';
 
-    return () => {
-      isMounted = false;
-    };
-  }, [id]);
+    const date = new Date(dateStr);
 
-  if (loading) {
-    return (
-      <div className="page-container" style={{ padding: '80px 24px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--text-muted)' }}>Loading TV show details...</p>
-      </div>
-    );
-  }
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+    });
+  };
 
-  if (!show) {
-    return (
-      <div className="page-container" style={{ padding: '80px 24px', textAlign: 'center' }}>
-        <h2>TV Show not found</h2>
-        <Link to="/tv" className="btn-primary" style={{ marginTop: '20px' }}>
-          Back to TV Shows
-        </Link>
-      </div>
-    );
-  }
+  const formattedDate = formatDate(releaseDateRaw);
 
-  const inWishlist = isInWishlist(show.id);
-  const backdropUrl = show.backdrop_path ? `${BACKDROP_BASE_URL}${show.backdrop_path}` : null;
-  const posterUrl = show.poster_path ? `${IMAGE_BASE_URL}${show.poster_path}` : null;
+  const ratingPercent = item.vote_average
+    ? Math.round(item.vote_average * 10)
+    : 0;
+
+  const posterUrl = item.poster_path
+    ? `${IMAGE_BASE_URL}${item.poster_path}`
+    : null;
+
+  const itemType = item.media_type || mediaType;
+
+  const detailLink =
+    itemType === 'tv'
+      ? `/tv/${item.id}`
+      : `/movie/${item.id}`;
 
   return (
-    <div>
-      <div className="hero-banner" style={{ minHeight: '480px' }}>
-        {backdropUrl && (
-          <div 
-            className="hero-backdrop" 
-            style={{ backgroundImage: `url(${backdropUrl})` }}
-          />
-        )}
-        <div className="hero-overlay" />
-        
-        <div className="hero-content" style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          {posterUrl && (
-            <img 
-              src={posterUrl} 
-              alt={show.name} 
-              style={{ width: '220px', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-lg)' }} 
+    <div className="movie-card">
+      <div className="card-poster-wrapper">
+
+        <Link
+          to={detailLink}
+          style={{
+            display: 'block',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          {posterUrl ? (
+            <img
+              src={posterUrl}
+              alt={title}
+              className="card-poster"
+              loading="lazy"
             />
-          )}
+          ) : (
+            <div className="card-poster card-no-image">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect
+                  x="2"
+                  y="2"
+                  width="20"
+                  height="20"
+                  rx="2.18"
+                  ry="2.18"
+                />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+                <line x1="17" y1="17" x2="22" y2="17" />
+              </svg>
 
-          <div style={{ flex: 1, minWidth: '280px' }}>
-            <Link to="/tv" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', marginBottom: '16px' }}>
-              <ArrowLeft size={16} /> Back to TV Shows
-            </Link>
-            <h1 className="hero-title" style={{ fontSize: '2.5rem' }}>{show.name}</h1>
-            
-            <div className="hero-meta">
-              <span className="hero-rating">
-                <Star size={18} fill="currentColor" />
-                {show.vote_average?.toFixed(1)} ({show.vote_count} votes)
-              </span>
-              {show.first_air_date && <span>• {show.first_air_date}</span>}
-              {show.number_of_seasons && <span>• {show.number_of_seasons} Seasons</span>}
+              <span>{title}</span>
             </div>
+          )}
+        </Link>
 
-            <p className="hero-overview" style={{ WebkitLineClamp: 'unset' }}>{show.overview}</p>
+        <button
+          className="card-options-btn"
+          aria-label="More options"
+        >
+          <MoreHorizontal size={16} />
+        </button>
 
-            <button 
-              className="btn-primary"
-              onClick={() => toggleWishlist(show, 'tv')}
+        <div className="card-rating">
+          {ratingPercent}
+          <span>%</span>
+        </div>
+      </div>
+
+      <div className="card-info-row">
+        <div className="card-text-col">
+          <Link to={detailLink}>
+            <h3
+              className="card-title"
+              title={title}
             >
-              <Heart 
-                size={18} 
-                fill={inWishlist ? 'currentColor' : 'none'} 
-              />
-              <span>{inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
-            </button>
-          </div>
+              {title}
+            </h3>
+          </Link>
+
+          <span className="card-date">
+            {formattedDate}
+          </span>
         </div>
       </div>
     </div>

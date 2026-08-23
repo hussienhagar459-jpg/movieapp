@@ -1,4 +1,4 @@
- @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
   --primary: #fbe04d;
@@ -95,14 +95,6 @@ button {
   gap: 4px;
 }
 
-.nav-wishlist-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
 .nav-ai-btn {
   display: flex;
   align-items: center;
@@ -113,6 +105,7 @@ button {
   font-weight: 600;
   transition: var(--transition);
 }
+
 .nav-ai-btn:hover {
   background: rgba(0, 0, 0, 0.1);
 }
@@ -165,11 +158,13 @@ button {
 .search-btn:hover {
   background-color: var(--primary-hover);
 }
+
 .section-title {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 24px;
 }
+
 .search-results-title {
   font-size: 1rem;
   font-weight: 600;
@@ -276,20 +271,6 @@ button {
   color: var(--text-muted);
 }
 
-.card-wishlist-btn {
-  color: var(--text-muted);
-  transition: var(--transition);
-  margin-top: 4px;
-}
-
-.card-wishlist-btn:hover {
-  transform: scale(1.1);
-}
-
-.card-wishlist-btn.in-wishlist {
-  color: var(--primary);
-}
-
 .pagination-container {
   display: flex;
   align-items: center;
@@ -337,6 +318,7 @@ button {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -347,6 +329,7 @@ button {
     opacity: 0;
     transform: translateY(30px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -367,36 +350,47 @@ button {
 .movies-grid > div:nth-child(1) {
   animation-delay: 0.05s;
 }
+
 .movies-grid > div:nth-child(2) {
   animation-delay: 0.1s;
 }
+
 .movies-grid > div:nth-child(3) {
   animation-delay: 0.15s;
 }
+
 .movies-grid > div:nth-child(4) {
   animation-delay: 0.2s;
 }
+
 .movies-grid > div:nth-child(5) {
   animation-delay: 0.25s;
 }
+
 .movies-grid > div:nth-child(6) {
   animation-delay: 0.3s;
 }
+
 .movies-grid > div:nth-child(7) {
   animation-delay: 0.35s;
 }
+
 .movies-grid > div:nth-child(8) {
   animation-delay: 0.4s;
 }
+
 .movies-grid > div:nth-child(9) {
   animation-delay: 0.45s;
 }
+
 .movies-grid > div:nth-child(10) {
   animation-delay: 0.5s;
 }
+
 .movies-grid > div:nth-child(11) {
   animation-delay: 0.55s;
 }
+
 .movies-grid > div:nth-child(12) {
   animation-delay: 0.6s;
 }
@@ -418,12 +412,15 @@ button {
   .navbar-container {
     padding: 0 40px;
   }
+
   .page-container {
     padding: 0 40px 40px 40px;
   }
+
   .welcome-title {
     font-size: 2.2rem;
   }
+
   .movies-grid {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
@@ -433,28 +430,36 @@ button {
   .navbar-container {
     padding: 0 20px;
   }
+
   .page-container {
     padding: 0 20px 20px 20px;
   }
+
   .nav-actions {
     gap: 12px;
   }
+
   .welcome-banner {
     padding: 40px 20px;
   }
+
   .welcome-title {
     font-size: 1.8rem;
   }
+
   .search-form {
     flex-direction: column;
   }
+
   .search-btn {
     padding: 14px 32px;
   }
+
   .movies-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
   }
+
   .card-rating {
     width: 30px;
     height: 30px;
@@ -462,6 +467,7 @@ button {
     bottom: -15px;
     left: 8px;
   }
+
   .card-rating span {
     font-size: 0.45rem;
   }
@@ -472,12 +478,15 @@ button {
     grid-template-columns: 1fr;
     gap: 24px;
   }
+
   .welcome-title {
     font-size: 1.5rem;
   }
+
   .welcome-subtitle {
     font-size: 0.95rem;
   }
+
   .nav-brand {
     font-size: 1rem;
   }

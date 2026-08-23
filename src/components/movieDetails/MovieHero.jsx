@@ -1,36 +1,14 @@
-import { useState, useEffect } from "react";
-// 1. استيراد الـ Hook الخاص بالـ Wishlist Context
-import { useWishlist } from "../../context/WishlistContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStar,
   faPlay,
-  faHeart,
   faClock,
   faCircleCheck,
-  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieHero({ movie, onWatchTrailer }) {
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const [isInWishlist, setIsInWishlist] = useState(false);
-
-  useEffect(() => {
-    if (!movie || !wishlist) return;
-    setIsInWishlist(wishlist.some((item) => item.id === movie.id));
-  }, [movie, wishlist]);
-
-  const toggleWishlist = () => {
-    if (!movie) return;
-    if (isInWishlist) {
-      removeFromWishlist(movie.id); 
-    } else {
-      addToWishlist(movie);
-    }
-  };
-
   if (!movie) return null;
 
   return (
@@ -150,8 +128,13 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 gap: "6px",
               }}
             >
-              <FontAwesomeIcon icon={faClock} style={{ color: "#facc15" }} />
-              <span>{movie.runtime ? `${movie.runtime} min` : "N/A"}</span>
+              <FontAwesomeIcon
+                icon={faClock}
+                style={{ color: "#facc15" }}
+              />
+              <span>
+                {movie.runtime ? `${movie.runtime} min` : "N/A"}
+              </span>
             </span>
 
             <span
@@ -200,37 +183,11 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 boxShadow: "0 6px 20px rgba(250, 204, 21, 0.4)",
               }}
             >
-              <FontAwesomeIcon icon={faPlay} style={{ color: "#111827" }} />
-              <span>Watch Trailer</span>
-            </button>
-
-            <button
-              onClick={toggleWishlist}
-              style={{
-                backgroundColor: isInWishlist
-                  ? "rgba(239, 68, 68, 0.2)"
-                  : "rgba(255,255,255,0.12)",
-                color: isInWishlist ? "#f87171" : "#fff",
-                fontWeight: "600",
-                padding: "14px 28px",
-                borderRadius: "12px",
-                border: isInWishlist
-                  ? "1px solid rgba(239, 68, 68, 0.5)"
-                  : "1px solid rgba(255,255,255,0.25)",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                fontSize: "1rem",
-                backdropFilter: "blur(6px)",
-                transition: "all 0.2s ease-in-out",
-              }}
-            >
               <FontAwesomeIcon
-                icon={isInWishlist ? faCheck : faHeart}
-                style={{ color: isInWishlist ? "#4ade80" : "#ef4444" }}
+                icon={faPlay}
+                style={{ color: "#111827" }}
               />
-              <span>{isInWishlist ? "In Wishlist" : "Add to Wishlist"}</span>
+              <span>Watch Trailer</span>
             </button>
           </div>
         </div>
