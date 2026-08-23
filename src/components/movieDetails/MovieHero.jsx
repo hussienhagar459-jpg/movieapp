@@ -1,19 +1,39 @@
+import { useState, useEffect } from "react";
+// 1. استيراد الـ Hook الخاص بالـ Wishlist Context
+import { useWishlist } from "../../context/WishlistContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStar,
   faPlay,
+  faHeart,
   faClock,
   faCircleCheck,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-// TMDB Poster Base URL
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieHero({ movie, onWatchTrailer }) {
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const [isInWishlist, setIsInWishlist] = useState(false);
+
+  useEffect(() => {
+    if (!movie || !wishlist) return;
+    setIsInWishlist(wishlist.some((item) => item.id === movie.id));
+  }, [movie, wishlist]);
+
+  const toggleWishlist = () => {
+    if (!movie) return;
+    if (isInWishlist) {
+      removeFromWishlist(movie.id); 
+    } else {
+      addToWishlist(movie);
+    }
+  };
+
   if (!movie) return null;
 
   return (
-    // Hero Banner Container
     <div
       style={{
         width: "100%",
@@ -32,7 +52,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
           alignItems: "center",
         }}
       >
-        {/* Movie Poster */}
         <img
           src={
             movie.poster_path
@@ -49,7 +68,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
           }}
         />
 
-        {/* Hero Info Column */}
         <div
           style={{
             flex: "1 1 340px",
@@ -92,7 +110,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
             </p>
           )}
 
-          {/* Badges Row */}
           <div
             style={{
               display: "flex",
@@ -158,7 +175,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
             </span>
           </div>
 
-          {/* Action Buttons */}
           <div
             style={{
               display: "flex",
@@ -186,6 +202,35 @@ export default function MovieHero({ movie, onWatchTrailer }) {
             >
               <FontAwesomeIcon icon={faPlay} style={{ color: "#111827" }} />
               <span>Watch Trailer</span>
+            </button>
+
+            <button
+              onClick={toggleWishlist}
+              style={{
+                backgroundColor: isInWishlist
+                  ? "rgba(239, 68, 68, 0.2)"
+                  : "rgba(255,255,255,0.12)",
+                color: isInWishlist ? "#f87171" : "#fff",
+                fontWeight: "600",
+                padding: "14px 28px",
+                borderRadius: "12px",
+                border: isInWishlist
+                  ? "1px solid rgba(239, 68, 68, 0.5)"
+                  : "1px solid rgba(255,255,255,0.25)",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                fontSize: "1rem",
+                backdropFilter: "blur(6px)",
+                transition: "all 0.2s ease-in-out",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={isInWishlist ? faCheck : faHeart}
+                style={{ color: isInWishlist ? "#4ade80" : "#ef4444" }}
+              />
+              <span>{isInWishlist ? "In Wishlist" : "Add to Wishlist"}</span>
             </button>
           </div>
         </div>

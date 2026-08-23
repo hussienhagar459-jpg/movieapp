@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MoreHorizontal } from 'lucide-react';
+import { Heart, MoreHorizontal } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
 import { IMAGE_BASE_URL } from '../services/tmdb';
 
 export default function MovieCard({ item, mediaType = 'movie' }) {
+  const { isInWishlist, toggleWishlist } = useWishlist();
   
   if (!item) return null;
 
+  const inWishlist = isInWishlist(item.id);
   const title = item.title || item.name || 'Untitled';
   const releaseDateRaw = item.release_date || item.first_air_date;
   
@@ -22,6 +25,12 @@ export default function MovieCard({ item, mediaType = 'movie' }) {
   const posterUrl = item.poster_path ? `${IMAGE_BASE_URL}${item.poster_path}` : null;
   const itemType = item.media_type || mediaType;
   const detailLink = itemType === 'tv' ? `/tv/${item.id}` : `/movie/${item.id}`;
+
+  const handleWishlistClick = (e) => {
+    e.preventDefault(); 
+    e.stopPropagation();
+    toggleWishlist(item, itemType);
+  };
 
   return (
     <div className="movie-card">
@@ -69,6 +78,18 @@ export default function MovieCard({ item, mediaType = 'movie' }) {
           </Link>
           <span className="card-date">{formattedDate}</span>
         </div>
+        
+        <button 
+          className={`card-wishlist-btn ${inWishlist ? 'in-wishlist' : ''}`}
+          onClick={handleWishlistClick}
+          aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          <Heart 
+            size={18} 
+            fill={inWishlist ? 'var(--primary)' : 'none'} 
+            color={inWishlist ? 'var(--primary)' : 'currentColor'}
+          />
+        </button>
       </div>
     </div>
   );

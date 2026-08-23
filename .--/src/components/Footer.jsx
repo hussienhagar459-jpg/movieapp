@@ -15,7 +15,6 @@ export default function Footer() {
         <div style={{ display: 'flex', gap: '20px' }}>
           <Link to="/" style={{ color: 'var(--text-muted)' }}>Movies</Link>
           <Link to="/tv" style={{ color: 'var(--text-muted)' }}>TV Shows</Link>
-          <Link to="/watchlist" style={{ color: 'var(--text-muted)' }}>Wishlist</Link>
           <Link to="/ai-assistant" style={{ color: 'var(--text-muted)' }}>AI Assistant</Link>
         </div>
 
