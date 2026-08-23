@@ -1,46 +1,15 @@
-import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStar,
   faPlay,
-  faHeart,
   faClock,
   faCircleCheck,
-  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 // TMDB Poster Base URL
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieHero({ movie, onWatchTrailer }) {
-  const [isInWishlist, setIsInWishlist] = useState(false);
-
-  // Check if current movie already exists in localStorage Wishlist
-  useEffect(() => {
-    if (!movie) return;
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    setIsInWishlist(wishlist.some((item) => item.id === movie.id));
-  }, [movie]);
-
-  // Toggle Add / Remove from Wishlist
-  const toggleWishlist = () => {
-    if (!movie) return;
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-
-    let updatedWishlist;
-    if (isInWishlist) {
-      updatedWishlist = wishlist.filter((item) => item.id !== movie.id);
-      setIsInWishlist(false);
-    } else {
-      updatedWishlist = [...wishlist, movie];
-      setIsInWishlist(true);
-    }
-
-    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-    // Dispatch custom event to notify Navbar / Wishlist page
-    window.dispatchEvent(new Event("wishlistUpdated"));
-  };
-
   if (!movie) return null;
 
   return (
@@ -217,36 +186,6 @@ export default function MovieHero({ movie, onWatchTrailer }) {
             >
               <FontAwesomeIcon icon={faPlay} style={{ color: "#111827" }} />
               <span>Watch Trailer</span>
-            </button>
-
-            {/* Functional Wishlist Button */}
-            <button
-              onClick={toggleWishlist}
-              style={{
-                backgroundColor: isInWishlist
-                  ? "rgba(239, 68, 68, 0.2)"
-                  : "rgba(255,255,255,0.12)",
-                color: isInWishlist ? "#f87171" : "#fff",
-                fontWeight: "600",
-                padding: "14px 28px",
-                borderRadius: "12px",
-                border: isInWishlist
-                  ? "1px solid rgba(239, 68, 68, 0.5)"
-                  : "1px solid rgba(255,255,255,0.25)",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                fontSize: "1rem",
-                backdropFilter: "blur(6px)",
-                transition: "all 0.2s ease-in-out",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={isInWishlist ? faCheck : faHeart}
-                style={{ color: isInWishlist ? "#4ade80" : "#ef4444" }}
-              />
-              <span>{isInWishlist ? "In Wishlist" : "Add to Wishlist"}</span>
             </button>
           </div>
         </div>

@@ -1,24 +1,25 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {
-  getMovieDetails,
-  getMovieRecommendations,
-  getMovieReviews,
-} from "../services/tmdbApiMovieDetails";
 
-import MovieHero from "../components/TvDetails/TvHero";
-import MovieInfo from "../components/TvDetails/TvInfo";
-import MovieTrailer from "../components/TvDetails/TvTrailer";
-import MovieCast from "../components/TvDetails/TvCast";
-import Recommendations from "../components/TvDetails/Recommendations";
-import MovieReviews from "../components/TvDetails/TvReviews";
+import {
+  getTvDetails,
+  getTvRecommendations,
+  getTvReviews,
+} from "../service/tmdbApiTvDetails";
+
+import TvHero from "../components/tvDetails/TvHero";
+import TvInfo from "../components/tvDetails/TvInfo";
+import TvTrailer from "../components/tvDetails/TvTrailer";
+import TvCast from "../components/tvDetails/TvCast";
+import Recommendations from "../components/tvDetails/Recommendations";
+import TvReviews from "../components/tvDetails/TvReviews";
 
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
-export default function MovieDetails() {
+export default function TvDetails() {
   const { id } = useParams();
 
-  const [movie, setMovie] = useState(null);
+  const [tv, setTv] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,25 +30,31 @@ export default function MovieDetails() {
       try {
         setLoading(true);
         setError(null);
-        window.scrollTo({ top: 0, behavior: "smooth" });
 
-        const [movieData, recData, revData] = await Promise.all([
-          getMovieDetails(id),
-          getMovieRecommendations(id),
-          getMovieReviews(id),
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+
+        const [tvData, recData, revData] = await Promise.all([
+          getTvDetails(id),
+          getTvRecommendations(id),
+          getTvReviews(id),
         ]);
 
-        setMovie(movieData);
+        setTv(tvData);
         setRecommendations(recData.results || []);
         setReviews(revData.results || []);
       } catch (err) {
-        setError(err.message || "Failed to load movie details");
+        setError(err.message || "Failed to load TV show details");
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchAllData();
+    if (id) {
+      fetchAllData();
+    }
   }, [id]);
 
   const scrollToTrailer = () => {
@@ -81,7 +88,7 @@ export default function MovieDetails() {
     );
   }
 
-  if (error || !movie) {
+  if (error || !tv) {
     return (
       <div
         style={{
@@ -95,9 +102,13 @@ export default function MovieDetails() {
         }}
       >
         <p
-          style={{ color: "#ef4444", fontSize: "1.25rem", fontWeight: "bold" }}
+          style={{
+            color: "#ef4444",
+            fontSize: "1.25rem",
+            fontWeight: "bold",
+          }}
         >
-          ⚠️ {error || "Movie not found"}
+          ⚠️ {error || "TV show not found"}
         </p>
       </div>
     );
@@ -108,9 +119,13 @@ export default function MovieDetails() {
       style={{
         minHeight: "100vh",
         color: "#ffffff",
-        backgroundImage: `linear-gradient(to bottom, rgba(11, 15, 25, 0.88), rgba(11, 15, 25, 0.98)), url(${
-          movie.backdrop_path
-            ? `${BACKDROP_BASE_URL}${movie.backdrop_path}`
+        backgroundImage: `linear-gradient(
+          to bottom,
+          rgba(11, 15, 25, 0.88),
+          rgba(11, 15, 25, 0.98)
+        ), url(${
+          tv.backdrop_path
+            ? `${BACKDROP_BASE_URL}${tv.backdrop_path}`
             : ""
         })`,
         backgroundSize: "cover",
@@ -119,9 +134,8 @@ export default function MovieDetails() {
         paddingBottom: "80px",
       }}
     >
-      <MovieHero movie={movie} onWatchTrailer={scrollToTrailer} />
+      <TvHero tv={tv} onWatchTrailer={scrollToTrailer} />
 
-      {/* Full-Width Padded Sections Container */}
       <div
         style={{
           width: "100%",
@@ -133,11 +147,15 @@ export default function MovieDetails() {
           gap: "60px",
         }}
       >
-        <MovieInfo movie={movie} />
-        <MovieTrailer videos={movie.videos} />
-        <MovieCast cast={movie.credits?.cast} />
+        <TvInfo tv={tv} />
+
+        <TvTrailer videos={tv.videos} />
+
+        <TvCast cast={tv.credits?.cast} />
+
         <Recommendations movies={recommendations} />
-        <MovieReviews reviews={reviews} />
+
+        <TvReviews reviews={reviews} />
       </div>
     </div>
   );
