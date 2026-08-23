@@ -6,12 +6,12 @@ import {
   getMovieReviews,
 } from "../services/tmdbApiMovieDetails";
 
-import MovieHero from "../components/TvDetails/TvHero";
-import MovieInfo from "../components/TvDetails/TvInfo";
-import MovieTrailer from "../components/TvDetails/TvTrailer";
-import MovieCast from "../components/TvDetails/TvCast";
-import Recommendations from "../components/TvDetails/Recommendations";
-import MovieReviews from "../components/TvDetails/TvReviews";
+import MovieHero from "../components/movieDetails/MovieHero";
+import MovieInfo from "../components/movieDetails/MovieInfo";
+import MovieTrailer from "../components/movieDetails/MovieTrailer";
+import MovieCast from "../components/movieDetails/MovieCast";
+import Recommendations from "../components/movieDetails/Recommendations";
+import MovieReviews from "../components/movieDetails/MovieReviews";
 
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
