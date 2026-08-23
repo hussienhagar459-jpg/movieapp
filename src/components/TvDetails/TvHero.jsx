@@ -1,37 +1,15 @@
-import { useState, useEffect } from "react";
-// 1. استيراد الـ Hook الخاص بالـ Wishlist Context
-import { useWishlist } from "../../context/WishlistContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStar,
   faPlay,
-  faHeart,
   faClock,
   faCircleCheck,
-  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-export default function MovieHero({ movie, onWatchTrailer }) {
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const [isInWishlist, setIsInWishlist] = useState(false);
-
-  useEffect(() => {
-    if (!movie || !wishlist) return;
-    setIsInWishlist(wishlist.some((item) => item.id === movie.id));
-  }, [movie, wishlist]);
-
-  const toggleWishlist = () => {
-    if (!movie) return;
-    if (isInWishlist) {
-      removeFromWishlist(movie.id); 
-    } else {
-      addToWishlist(movie);
-    }
-  };
-
-  if (!movie) return null;
+export default function TvHero({ show, onWatchTrailer }) {
+  if (!show) return null;
 
   return (
     <div
@@ -40,6 +18,7 @@ export default function MovieHero({ movie, onWatchTrailer }) {
         padding: "50px 32px",
         borderBottom: "1px solid rgba(255,255,255,0.1)",
         marginBottom: "40px",
+        animation: "fadeIn 0.6s ease",
       }}
     >
       <div
@@ -52,30 +31,35 @@ export default function MovieHero({ movie, onWatchTrailer }) {
           alignItems: "center",
         }}
       >
+        {/* Poster */}
         <img
           src={
-            movie.poster_path
-              ? `${IMAGE_BASE_URL}${movie.poster_path}`
+            show.poster_path
+              ? `${IMAGE_BASE_URL}${show.poster_path}`
               : "https://via.placeholder.com/500x750?text=No+Poster"
           }
-          alt={movie.title}
+          alt={show.name}
           style={{
             width: "280px",
             borderRadius: "16px",
             flexShrink: 0,
             boxShadow: "0 25px 40px rgba(0,0,0,0.85)",
             border: "1px solid rgba(255,255,255,0.15)",
+            animation: "slideUp 0.7s ease",
           }}
         />
 
+        {/* Info */}
         <div
           style={{
             flex: "1 1 340px",
             display: "flex",
             flexDirection: "column",
             gap: "18px",
+            animation: "slideRight 0.7s ease",
           }}
         >
+          {/* Title */}
           <h1
             style={{
               fontSize: "2.75rem",
@@ -85,7 +69,7 @@ export default function MovieHero({ movie, onWatchTrailer }) {
               lineHeight: 1.2,
             }}
           >
-            {movie.title}{" "}
+            {show.name}{" "}
             <span
               style={{
                 color: "#9ca3af",
@@ -93,11 +77,12 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 fontSize: "1.85rem",
               }}
             >
-              ({movie.release_date?.slice(0, 4) || "N/A"})
+              ({show.first_air_date?.slice(0, 4) || "N/A"})
             </span>
           </h1>
 
-          {movie.tagline && (
+          {/* Tagline */}
+          {show.tagline && (
             <p
               style={{
                 color: "#facc15",
@@ -106,10 +91,11 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 margin: 0,
               }}
             >
-              "{movie.tagline}"
+              "{show.tagline}"
             </p>
           )}
 
+          {/* Meta */}
           <div
             style={{
               display: "flex",
@@ -118,6 +104,7 @@ export default function MovieHero({ movie, onWatchTrailer }) {
               alignItems: "center",
             }}
           >
+            {/* Rating */}
             <span
               style={{
                 backgroundColor: "#facc15",
@@ -132,11 +119,29 @@ export default function MovieHero({ movie, onWatchTrailer }) {
               }}
             >
               <FontAwesomeIcon icon={faStar} />
+
               <span>
-                {movie.vote_average ? movie.vote_average.toFixed(1) : "NR"}
+                {show.vote_average
+                  ? show.vote_average.toFixed(1)
+                  : "NR"}
               </span>
             </span>
 
+            {/* Seasons */}
+            <span
+              style={{
+                backgroundColor: "rgba(255,255,255,0.1)",
+                color: "#e5e7eb",
+                border: "1px solid rgba(255,255,255,0.2)",
+                padding: "6px 16px",
+                borderRadius: "9999px",
+                fontSize: "0.9rem",
+              }}
+            >
+              {show.number_of_seasons || 0} Seasons
+            </span>
+
+            {/* Episodes */}
             <span
               style={{
                 backgroundColor: "rgba(255,255,255,0.1)",
@@ -150,10 +155,17 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 gap: "6px",
               }}
             >
-              <FontAwesomeIcon icon={faClock} style={{ color: "#facc15" }} />
-              <span>{movie.runtime ? `${movie.runtime} min` : "N/A"}</span>
+              <FontAwesomeIcon
+                icon={faClock}
+                style={{ color: "#facc15" }}
+              />
+
+              <span>
+                {show.number_of_episodes || "N/A"} Episodes
+              </span>
             </span>
 
+            {/* Status */}
             <span
               style={{
                 backgroundColor: "rgba(255,255,255,0.1)",
@@ -171,10 +183,12 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 icon={faCircleCheck}
                 style={{ color: "#4ade80" }}
               />
-              <span>{movie.status || "Released"}</span>
+
+              <span>{show.status || "N/A"}</span>
             </span>
           </div>
 
+          {/* Buttons */}
           <div
             style={{
               display: "flex",
@@ -198,43 +212,58 @@ export default function MovieHero({ movie, onWatchTrailer }) {
                 gap: "10px",
                 fontSize: "1rem",
                 boxShadow: "0 6px 20px rgba(250, 204, 21, 0.4)",
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-3px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              <FontAwesomeIcon icon={faPlay} style={{ color: "#111827" }} />
-              <span>Watch Trailer</span>
-            </button>
+              <FontAwesomeIcon icon={faPlay} />
 
-            <button
-              onClick={toggleWishlist}
-              style={{
-                backgroundColor: isInWishlist
-                  ? "rgba(239, 68, 68, 0.2)"
-                  : "rgba(255,255,255,0.12)",
-                color: isInWishlist ? "#f87171" : "#fff",
-                fontWeight: "600",
-                padding: "14px 28px",
-                borderRadius: "12px",
-                border: isInWishlist
-                  ? "1px solid rgba(239, 68, 68, 0.5)"
-                  : "1px solid rgba(255,255,255,0.25)",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                fontSize: "1rem",
-                backdropFilter: "blur(6px)",
-                transition: "all 0.2s ease-in-out",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={isInWishlist ? faCheck : faHeart}
-                style={{ color: isInWishlist ? "#4ade80" : "#ef4444" }}
-              />
-              <span>{isInWishlist ? "In Wishlist" : "Add to Wishlist"}</span>
+              <span>Watch Trailer</span>
             </button>
           </div>
         </div>
       </div>
+
+      {/* Animation */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+
+          @keyframes slideUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes slideRight {
+            from {
+              opacity: 0;
+              transform: translateX(40px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }

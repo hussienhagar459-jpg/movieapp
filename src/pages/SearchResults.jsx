@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import tmdbApi from "../services/tmdb";
-import MovieCard from "../components/MovieCard";
+import MovieCard from "../components/TvCard";
 import Pagination from "../components/Pagination";
 import { Search } from "lucide-react";
 
@@ -98,11 +98,7 @@ export default function SearchResults() {
             margin: "40px auto",
           }}
         >
-          <Search
-            size={55}
-            color="black`"
-            style={{ marginBottom: "16px" }}
-          />
+          <Search size={55} color="black`" style={{ marginBottom: "16px" }} />
           <h2 style={{ fontSize: "1.4rem", marginBottom: "8px" }}>
             No Results Found
           </h2>
