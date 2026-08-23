@@ -2,22 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
   faTags,
-  faMoneyBillWave,
-  faChartLine,
+  faTv,
+  faLayerGroup,
   faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function MovieInfo({ movie }) {
-  if (!movie) return null;
-
-  const formatCurrency = (amount) => {
-    if (!amount) return "N/A";
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+export default function TvInfo({ show }) {
+  const data = show;
+  if (!data) return null;
 
   return (
     <div
@@ -58,12 +50,12 @@ export default function MovieInfo({ movie }) {
             margin: 0,
           }}
         >
-          {movie.overview || "No description available for this movie."}
+          {data.overview || "No description available for this show."}
         </p>
       </div>
 
       {/* Genres */}
-      {movie.genres && movie.genres.length > 0 && (
+      {data.genres && data.genres.length > 0 && (
         <div>
           <h3
             style={{
@@ -80,7 +72,7 @@ export default function MovieInfo({ movie }) {
             <span>Genres</span>
           </h3>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-            {movie.genres.map((genre) => (
+            {data.genres.map((genre) => (
               <span
                 key={genre.id}
                 style={{
@@ -126,7 +118,7 @@ export default function MovieInfo({ movie }) {
           </div>
           <div>
             <p style={{ fontSize: "0.8rem", color: "#9ca3af", margin: 0 }}>
-              Release Date
+              First Air Date
             </p>
             <p
               style={{
@@ -136,7 +128,7 @@ export default function MovieInfo({ movie }) {
                 margin: "2px 0 0",
               }}
             >
-              {movie.release_date || "N/A"}
+              {data.first_air_date || "N/A"}
             </p>
           </div>
         </div>
@@ -151,13 +143,13 @@ export default function MovieInfo({ movie }) {
             }}
           >
             <FontAwesomeIcon
-              icon={faMoneyBillWave}
+              icon={faLayerGroup}
               style={{ fontSize: "1.3rem" }}
             />
           </div>
           <div>
             <p style={{ fontSize: "0.8rem", color: "#9ca3af", margin: 0 }}>
-              Budget
+              Seasons
             </p>
             <p
               style={{
@@ -167,7 +159,7 @@ export default function MovieInfo({ movie }) {
                 margin: "2px 0 0",
               }}
             >
-              {formatCurrency(movie.budget)}
+              {data.number_of_seasons || "N/A"}
             </p>
           </div>
         </div>
@@ -181,14 +173,11 @@ export default function MovieInfo({ movie }) {
               color: "#60a5fa",
             }}
           >
-            <FontAwesomeIcon
-              icon={faChartLine}
-              style={{ fontSize: "1.3rem" }}
-            />
+            <FontAwesomeIcon icon={faTv} style={{ fontSize: "1.3rem" }} />
           </div>
           <div>
             <p style={{ fontSize: "0.8rem", color: "#9ca3af", margin: 0 }}>
-              Revenue
+              Episodes
             </p>
             <p
               style={{
@@ -198,7 +187,7 @@ export default function MovieInfo({ movie }) {
                 margin: "2px 0 0",
               }}
             >
-              {formatCurrency(movie.revenue)}
+              {data.number_of_episodes || "N/A"}
             </p>
           </div>
         </div>
