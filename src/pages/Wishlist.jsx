@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useWishlist } from '../context/WishlistContext';
 import MovieCard from '../components/MovieCard';
