@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import tmdbApi from '../services/tmdb';
-import MovieCard from '../components/MovieCard';
-import Pagination from '../components/Pagination';
+import React, { useState, useEffect } from "react";
+import tmdbApi from "../services/tmdb";
+import MovieCard from "../components/TvCard";
+import Pagination from "../components/Pagination";
 
 export default function TvShows() {
   const [shows, setShows] = useState([]);
@@ -20,7 +20,7 @@ export default function TvShows() {
           setTotalPages(data.total_pages || 1);
         }
       } catch (err) {
-        console.error('Error fetching TV shows:', err);
+        console.error("Error fetching TV shows:", err);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -33,7 +33,7 @@ export default function TvShows() {
   }, [currentPage]);
 
   return (
-    <div className="page-container" style={{ paddingTop: '30px' }}>
+    <div className="page-container" style={{ paddingTop: "30px" }}>
       <div className="section-header">
         <div className="section-title-group">
           <div className="section-indicator" />
