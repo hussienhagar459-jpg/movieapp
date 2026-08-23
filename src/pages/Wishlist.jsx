@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useWishlist } from '../context/WishlistContext';
-import MovieCard from '../components/MovieCard';
 import { Heart, Film, Tv } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

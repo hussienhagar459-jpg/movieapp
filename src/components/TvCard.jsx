@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MoreHorizontal } from "lucide-react";
+import { Heart } from "lucide-react";
 import { IMAGE_BASE_URL } from "../services/tmdb";
+import { useWishlist } from "../context/WishlistContext";
 
 export default function MovieCard({ item, mediaType = "movie" }) {
+  const { isInWishlist, toggleWishlist } = useWishlist();
+
   if (!item) return null;
 
   const title = item.title || item.name || "Untitled";
@@ -93,20 +96,13 @@ export default function MovieCard({ item, mediaType = "movie" }) {
           )}
         </Link>
 
-        <button
-          className="card-options-btn"
-          aria-label="More options"
-        >
-          <MoreHorizontal size={16} />
-        </button>
-
         <div className="card-rating">
           {ratingPercent}
           <span>%</span>
         </div>
       </div>
 
-      <div className="card-info-row">
+      <div className="card-info-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="card-text-col">
           <Link to={detailLink}>
             <h3
@@ -121,6 +117,28 @@ export default function MovieCard({ item, mediaType = "movie" }) {
             {formattedDate}
           </span>
         </div>
+
+        <button
+          className="card-wishlist-toggle"
+          aria-label={isInWishlist(item.id) ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(item, itemType);
+          }}
+          style={{
+            color: isInWishlist(item.id) ? "var(--primary)" : "var(--text-muted)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: "4px"
+          }}
+        >
+          <Heart size={20} fill={isInWishlist(item.id) ? "currentColor" : "none"} />
+        </button>
       </div>
     </div>
   );
